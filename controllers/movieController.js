@@ -6,8 +6,13 @@ const index = (req, res) => {
   const sql = `SELECT * FROM movies`;
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: "Database query failed" });
+
+    const movies = results.map((movie) => {
+      movie.image = "http://localhost:3000/img/movies/" + movie.image;
+      return movie;
+    });
     res.json({
-      data: results,
+      data: movies,
       status: 200,
     });
   });
