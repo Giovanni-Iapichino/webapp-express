@@ -35,6 +35,8 @@ GROUP BY movies.id`;
 
     const movie = results[0];
 
+    movie.image = "http://localhost:3000/img/movies/" + movie.image;
+
     const sqlReview = `SELECT *
 FROM reviews
 WHERE movie_id = 2`;
