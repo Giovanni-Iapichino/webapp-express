@@ -1,6 +1,7 @@
 // IMPORT
 const express = require("express");
 const { notFound, errorHandler } = require("./middlewares/errors");
+const moviesRouter = require("./routers/movies");
 
 // CONFIG
 const app = express();
@@ -10,9 +11,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 // ROUTES
-app.get("/", (req, res) => {
-  res.json("Benvenuto sul backend dei movies");
-});
+app.use("/movies", moviesRouter);
 
 // ERROR HANDLER MIDDLEWARES
 app.use(notFound);
