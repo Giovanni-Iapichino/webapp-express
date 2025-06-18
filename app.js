@@ -2,6 +2,8 @@
 const express = require("express");
 const { notFound, errorHandler } = require("./middlewares/errors");
 const moviesRouter = require("./routers/movies");
+const cors = require("cors");
+const appUrl = process.env.VITE_APP_URL;
 
 // CONFIG
 const app = express();
@@ -9,6 +11,11 @@ const app = express();
 // MIDDLEWARES
 app.use(express.static("public"));
 app.use(express.json());
+app.use(
+  cors({
+    origin: appUrl,
+  })
+);
 
 // ROUTES
 app.use("/movies", moviesRouter);
