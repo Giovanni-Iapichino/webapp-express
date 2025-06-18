@@ -39,7 +39,7 @@ GROUP BY movies.id`;
 
     const sqlReview = `SELECT *
 FROM reviews
-WHERE movie_id = 2`;
+WHERE movie_id = ?`;
 
     connection.query(sqlReview, [movieId], (err, results) => {
       if (err) return res.status(500).json({ error: "Database query failed" });
