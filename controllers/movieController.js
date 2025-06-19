@@ -58,7 +58,18 @@ WHERE movie_id = ?`;
 
 //# POST
 const post = (req, res) => {
-  const { movie_id, name, vote, text } = req.body;
+  const movie_id = parseInt(req.params.id);
+  const { name, vote, text } = req.body;
+
+  console.log("BODY:", req.body);
+  console.log("MOVIE ID:", movie_id);
+  console.log("DEBUG - Dati ricevuti dal client:", {
+    movie_id,
+    name,
+    vote,
+    text,
+  });
+
   const sqlMovieReview = `INSERT INTO movies.reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?);`;
 
   const sqlReviewValue = [movie_id, name, vote, text];
