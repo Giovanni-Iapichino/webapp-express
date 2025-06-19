@@ -5,7 +5,8 @@ const connection = require("../data/db");
 const index = (req, res) => {
   const sql = `SELECT * FROM movies`;
   connection.query(sql, (err, results) => {
-    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (err)
+      return res.status(500).json({ error: "Database query failed", err });
 
     const movies = results.map((movie) => {
       movie.image = "http://localhost:3000/img/movies/" + movie.image;
@@ -29,7 +30,8 @@ ON movies.id = reviews.movie_id
 WHERE movies.id = ?
 GROUP BY movies.id`;
   connection.query(sqlMovie, [movieId], (err, results) => {
-    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (err)
+      return res.status(500).json({ error: "Database query failed", err });
     if (results.length === 0)
       return res.status(404).json({ error: "Movie not found" });
 
@@ -42,7 +44,8 @@ FROM reviews
 WHERE movie_id = ?`;
 
     connection.query(sqlReview, [movieId], (err, results) => {
-      if (err) return res.status(500).json({ error: "Database query failed" });
+      if (err)
+        return res.status(500).json({ error: "Database query failed", err });
       movie.reviews = results;
 
       res.json({
@@ -53,4 +56,22 @@ WHERE movie_id = ?`;
   });
 };
 
-module.exports = { index, show };
+//# POST
+const post = (req, res) => {
+  const { movie_id, name, vote, text } = req.body;
+  const sqlMovieReview = `INSERT INTO movies.reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?);`;
+
+  const sqlReviewValue = [movie_id, name, vote, text];
+
+  connection.query(sqlMovieReview, sqlReviewValue, (err, results) => {
+    if (err)
+      return res.status(500).json({ error: "Database query failed", err });
+
+    res.status(201).json({
+      message: "Recensione salvata con successo",
+      review_id: results.insertId,
+    });
+  });
+};
+
+module.exports = { index, show, post };
